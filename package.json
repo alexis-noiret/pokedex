@@ -1,0 +1,15 @@
+{
+  "name": "pokedex-b1-fullstack",
+  "version": "1.0.0",
+  "description": "Pokédex — Projet Bloc 2 B1 FullStack La Plateforme",
+  "scripts": {
+    "sass": "sass --watch sass/style.scss style.css",
+    "sass:build": "sass sass/style.scss style.css --style=compressed"
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  },
+  "keywords": ["pokedex", "pokeapi", "sass", "html5", "javascript"],
+  "author": "B1 FullStack — La Plateforme",
+  "license": "MIT"
+}

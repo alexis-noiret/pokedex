@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explorez le monde des Pokémon — un Pokédex interactif moderne">
+  <title>PokéDex — Explorer tous les Pokémon</title>
+
+  <!-- Police importée : Silkscreen (display) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <!-- CSS compilé depuis SASS -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Script inline anti-flash thème (doit être dans le <head>) -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('pokedex-theme');
+      var preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      var theme = saved || (preferLight ? 'light' : 'dark');
+      if (theme === 'light') document.documentElement.classList.add('light');
+    })();
+  </script>
+  <style>
+    /* Transitions activées seulement après chargement (évite le flash) */
+    .theme-ready, .theme-ready * { transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="navbar__brand" aria-label="Retour à l'accueil">
+        <span class="navbar__logo">⬡</span>
+        <span class="navbar__title">PokéDex</span>
+      </a>
+      <ul class="navbar__links" role="list">
+        <li><a href="index.html" class="navbar__link navbar__link--active">Pokémon</a></li>
+        <li><a href="pages/about.html" class="navbar__link">À propos</a></li>
+      </ul>
+      <div class="navbar__controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème" title="Mode clair / Mode sombre">🌙</button>
+        <button class="navbar__toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__orb hero__orb--1"></div>
+      <div class="hero__orb hero__orb--2"></div>
+      <div class="hero__orb hero__orb--3"></div>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Génération I — 151 Pokémon</p>
+      <h1 class="hero__title" id="hero-title">Explore le <br><em>monde</em> Pokémon</h1>
+      <p class="hero__desc">Découvre les stats, types et évolutions de tous les Pokémon de la première génération.</p>
+      <a href="#pokedex" class="btn btn--primary">Commencer l'exploration</a>
+    </div>
+    <div class="hero__visual" aria-hidden="true">
+      <div class="pokeball">
+        <div class="pokeball__top"></div>
+        <div class="pokeball__center">
+          <div class="pokeball__button"></div>
+        </div>
+        <div class="pokeball__bottom"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTRES -->
+  <section class="filters" id="pokedex" aria-label="Filtres et recherche">
+    <div class="container">
+      <div class="filters__bar">
+        <div class="filters__search">
+          <label for="search-input" class="sr-only">Rechercher un Pokémon</label>
+          <input
+            type="search"
+            id="search-input"
+            class="filters__input"
+            placeholder="Rechercher un Pokémon..."
+            aria-label="Rechercher un Pokémon"
+            autocomplete="off"
+          >
+        </div>
+        <div class="filters__types" role="group" aria-label="Filtrer par type">
+          <button class="filter-btn filter-btn--active" data-type="all">Tous</button>
+          <button class="filter-btn" data-type="fire">🔥 Feu</button>
+          <button class="filter-btn" data-type="water">💧 Eau</button>
+          <button class="filter-btn" data-type="grass">🌿 Plante</button>
+          <button class="filter-btn" data-type="electric">⚡ Électrik</button>
+          <button class="filter-btn" data-type="psychic">🔮 Psy</button>
+          <button class="filter-btn" data-type="normal">⚪ Normal</button>
+        </div>
+      </div>
+      <p class="filters__count" id="pokemon-count" aria-live="polite" aria-atomic="true">Chargement...</p>
+    </div>
+  </section>
+
+  <!-- GRILLE PRINCIPALE -->
+  <main class="main" id="main-content">
+    <div class="container">
+      <!-- Loader -->
+      <div class="loader" id="loader" role="status" aria-label="Chargement des Pokémon">
+        <div class="loader__pokeball">
+          <div class="loader__top"></div>
+          <div class="loader__center"></div>
+          <div class="loader__bottom"></div>
+        </div>
+        <p class="loader__text">Chargement du Pokédex<span class="loader__dots"></span></p>
+      </div>
+
+      <!-- Grille de cartes -->
+      <section
+        id="pokemon-grid"
+        class="pokemon-grid"
+        aria-label="Liste des Pokémon"
+        aria-live="polite"
+      ></section>
+
+      <!-- Message vide -->
+      <div class="empty-state" id="empty-state" hidden>
+        <p class="empty-state__text">Aucun Pokémon trouvé 😅</p>
+        <button class="btn btn--secondary" id="reset-btn">Réinitialiser</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__text">
+        Données fournies par <a href="https://pokeapi.co" target="_blank" rel="noopener noreferrer" class="footer__link">PokéAPI</a> — Pokémon © Nintendo / Game Freak
+      </p>
+      <p class="footer__text">Projet Examen — La Plateforme Front end</p>
+    </div>
+  </footer>
+
+  <!-- Son audio caché (actif audio requis par le jury) -->
+  <audio id="click-sound" preload="auto" aria-hidden="true">
+    <source src="docs/click.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="js/theme.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

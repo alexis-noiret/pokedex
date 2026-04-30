@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>À propos — PokéDex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <!-- Script inline anti-flash thème (doit être dans le <head>) -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('pokedex-theme');
+      var preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      var theme = saved || (preferLight ? 'light' : 'dark');
+      if (theme === 'light') document.documentElement.classList.add('light');
+    })();
+  </script>
+  <style>
+    /* Transitions activées seulement après chargement (évite le flash) */
+    .theme-ready, .theme-ready * { transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <a href="../index.html" class="navbar__brand">
+        <span class="navbar__logo">⬡</span>
+        <span class="navbar__title">PokéDex</span>
+      </a>
+      <ul class="navbar__links" role="list">
+        <li><a href="../index.html" class="navbar__link">Pokémon</a></li>
+        <li><a href="about.html" class="navbar__link navbar__link--active">À propos</a></li>
+      </ul>
+      <div class="navbar__controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème" title="Mode clair / Mode sombre">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main" id="main-content">
+    <div class="container">
+      <a href="../index.html" class="back-link">← Retour au Pokédex</a>
+
+      <section class="about" aria-labelledby="about-title">
+        <h1 class="about__title" id="about-title">À propos du projet</h1>
+
+        <div class="about__grid">
+          <div class="about__card">
+            <h2 class="about__subtitle">Le projet</h2>
+            <p class="about__text">
+              Ce Pokédex est un projet pédagogique réalisé dans le cadre du titre RNCP
+              <strong>Développeur Web Full Stack</strong> — Bloc 2, à La Plateforme.
+            </p>
+            <p class="about__text">
+              Il affiche les 151 Pokémon de la première génération en consommant
+              l'API publique <strong>PokéAPI</strong>, sans clé d'authentification requise.
+            </p>
+          </div>
+
+          <div class="about__card">
+            <h2 class="about__subtitle">Technologies utilisées</h2>
+            <ul class="about__tech-list" role="list">
+              <li class="about__tech-item"><span class="about__tech-icon">📄</span> HTML5 sémantique (WCAG AA)</li>
+              <li class="about__tech-item"><span class="about__tech-icon">🎨</span> SASS / SCSS compilé</li>
+              <li class="about__tech-item"><span class="about__tech-icon">📱</span> Mobile-first + Flexbox / Grid</li>
+              <li class="about__tech-item"><span class="about__tech-icon">⚡</span> JavaScript ES6+ (fetch, async/await)</li>
+              <li class="about__tech-item"><span class="about__tech-icon">🌐</span> PokéAPI (API REST publique)</li>
+              <li class="about__tech-item"><span class="about__tech-icon">✍️</span> Google Fonts — Silkscreen + DM Sans</li>
+            </ul>
+          </div>
+
+          <div class="about__card about__card--full">
+            <h2 class="about__subtitle">Compétences démontrées</h2>
+            <div class="about__skills-grid">
+              <div class="about__skill">
+                <strong>Découpage maquette</strong>
+                <p>Analyse et traduction d'une maquette en blocs sémantiques HTML.</p>
+              </div>
+              <div class="about__skill">
+                <strong>Accessibilité WCAG AA</strong>
+                <p>Attributs aria, navigation clavier, contrastes suffisants, lang, alt.</p>
+              </div>
+              <div class="about__skill">
+                <strong>SASS / Préprocesseur</strong>
+                <p>Variables, nesting BEM, mixins, compilation automatique.</p>
+              </div>
+              <div class="about__skill">
+                <strong>Responsive Mobile-first</strong>
+                <p>Media queries ordonnées du mobile vers le desktop.</p>
+              </div>
+              <div class="about__skill">
+                <strong>Communication asynchrone</strong>
+                <p>Fetch + async/await vers PokéAPI, gestion des erreurs.</p>
+              </div>
+              <div class="about__skill">
+                <strong>Manipulation DOM</strong>
+                <p>Sélecteurs, événements, timers, création dynamique de contenu.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__text">
+        Données fournies par <a href="https://pokeapi.co" target="_blank" rel="noopener noreferrer" class="footer__link">PokéAPI</a> — Pokémon © Nintendo / Game Freak
+      </p>
+    </div>
+  </footer>
+  <script src="../js/theme.js"></script>
+</body>
+</html>

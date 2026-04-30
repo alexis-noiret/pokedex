@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détail Pokémon — PokéDex</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../style.css">
+  <!-- Script inline anti-flash thème (doit être dans le <head>) -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('pokedex-theme');
+      var preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      var theme = saved || (preferLight ? 'light' : 'dark');
+      if (theme === 'light') document.documentElement.classList.add('light');
+    })();
+  </script>
+  <style>
+    /* Transitions activées seulement après chargement (évite le flash) */
+    .theme-ready, .theme-ready * { transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important; }
+  </style>
+</head>
+<body class="detail-page">
+
+  <header class="header">
+    <nav class="navbar">
+      <a href="../index.html" class="navbar__brand" aria-label="Retour à l'accueil">
+        <span class="navbar__logo">⬡</span>
+        <span class="navbar__title">PokéDex</span>
+      </a>
+      <ul class="navbar__links" role="list">
+        <li><a href="../index.html" class="navbar__link">Pokémon</a></li>
+        <li><a href="about.html" class="navbar__link">À propos</a></li>
+      </ul>
+      <div class="navbar__controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème" title="Mode clair / Mode sombre">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main" id="main-content">
+    <div class="container">
+      <a href="../index.html" class="back-link" aria-label="Retour à la liste">
+        ← Retour au Pokédex
+      </a>
+
+      <!-- Loader -->
+      <div class="loader" id="loader" role="status" aria-label="Chargement">
+        <div class="loader__pokeball">
+          <div class="loader__top"></div>
+          <div class="loader__center"></div>
+          <div class="loader__bottom"></div>
+        </div>
+        <p class="loader__text">Chargement<span class="loader__dots"></span></p>
+      </div>
+
+      <!-- Contenu détail -->
+      <article class="detail" id="detail-content" hidden aria-live="polite">
+        <!-- Rempli dynamiquement par detail.js -->
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__text">
+        Données fournies par <a href="https://pokeapi.co" target="_blank" rel="noopener noreferrer" class="footer__link">PokéAPI</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/detail.js"></script>
+</body>
+</html>
