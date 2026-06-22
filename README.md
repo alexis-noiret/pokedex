@@ -1,373 +1,266 @@
-# 🎮 Application web dynamique connectée à une API publique — Projet pédagogique Bloc 2 RNCP Niveau 5
-
-![HTML5](https://img.shields.io/badge/HTML5-Sémantique-orange?style=for-the-badge&logo=html5)
-![SASS](https://img.shields.io/badge/SASS-SCSS-pink?style=for-the-badge&logo=sass)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow?style=for-the-badge&logo=javascript)
-![API](https://img.shields.io/badge/API-PokéAPI-red?style=for-the-badge)
-![WCAG](https://img.shields.io/badge/Accessibilité-WCAG_AA-green?style=for-the-badge)
+> 🎮 Application web dynamique connectée à une API publique — projet pédagogique Bloc 2 RNCP Niveau 5
 
 # 🔴 PokéDex — Application Web Front-End
 
+![HTML5](https://img.shields.io/badge/Language-HTML5-e34f26)
+![SASS](https://img.shields.io/badge/Style-SASS%2FSCSS-cc6699)
+![JavaScript](https://img.shields.io/badge/Language-JavaScript%20ES6+-f7df1e)
+![API](https://img.shields.io/badge/API-PokéAPI-ef5350)
+![WCAG](https://img.shields.io/badge/Accessibilité-WCAG%20AA-4caf50)
+![Status](https://img.shields.io/badge/Project-Examen%20Bloc%202-blue)
+
 ## 📌 Présentation
 
-Ce Pokédex est un projet pédagogique réalisé dans le cadre du titre RNCP Développeur Web Full Stack Niveau 5 (Bac+2) — Bloc 2 :  
-**Développer des interfaces Frontend pour un site ou une application Web/Web Mobile**, à **La Plateforme**.
+Ce Pokédex est un projet pédagogique réalisé dans le cadre du titre RNCP **Développeur Web Full Stack Niveau 5 (Bac+2)** — Bloc 2 : *Développer des interfaces Frontend pour un site ou une application Web/Web Mobile*, à **La Plateforme**.
 
-L’application affiche les **151 Pokémon de la première génération** en consommant l’API publique **PokéAPI**, sans clé d’authentification.
+Il affiche les **151 Pokémon de la première génération** en consommant l'API publique **PokéAPI**, sans clé d'authentification. L'application est entièrement dynamique, responsive et accessible.
 
-Le projet est entièrement :
-
-- ⚡ Dynamique
-- 📱 Responsive
-- ♿ Accessible (WCAG AA)
-- 🌙 Compatible Dark / Light mode
-
-🎯 **Objectif pédagogique :** démontrer la maîtrise du développement front-end moderne avec :
-
-- HTML5 sémantique
-- SASS / SCSS
-- JavaScript ES6+
-- Fetch API & async/await
-- Manipulation DOM
-- Responsive Design
-- Accessibilité WCAG AA
+🎯 Objectif : démontrer la maîtrise du développement front-end (HTML sémantique, SASS, JavaScript ES6+, communication asynchrone, accessibilité WCAG AA).
 
 ---
 
-# 🎨 Maquettes & Wireframes
+## 🎨 Maquettes & Wireframes
 
-## 🖼️ Maquettes haute fidélité
+| Document | Contenu |
+|----------|---------|
+| [📄 Voir les maquettes & wireframes](./design/pokedex-maquettes-wireframes.pdf) | Maquette accueil (dark/light), page détail (desktop/mobile), wireframes niveaux de gris |
 
-### Accueil / Détail
-![Maquette Pokédex](design/maquette%20pokedex.png)
-
-### Variantes Desktop & Mobile
-![Maquette Pokédex 2](design/maquette%20pokedex2.png)
-
----
-
-## 📐 Wireframes basse fidélité
-
-![Wireframe Pokédex](design/wireframe%20pokedex.png)
-
-Les maquettes couvrent :
-
-- 🏠 Page d’accueil
-- 🔍 Page détail Pokémon
-- 💻 Version Desktop
-- 📱 Version Mobile
-- 🌙 Mode sombre
-- ☀️ Mode clair
-- 🎨 Wireframes en niveaux de gris
+Les maquettes haute fidélité et wireframes basse fidélité couvrent :
+- **Maquette Accueil** — Desktop 1440px (mode sombre) & Mobile 390px (mode clair)
+- **Maquette Détail** — Desktop 1440px (mode sombre) & Mobile 390px (mode clair)
+- **Wireframes** — Accueil & Détail, Desktop & Mobile 390px, niveaux de gris
 
 ---
 
-# ⚙️ Fonctionnalités
+## ⚙️ Fonctionnalités
 
-## 🃏 Grille dynamique de Pokémon
+### 🃏 Grille de Pokémon
 
-- Affichage dynamique des 151 Pokémon
-- Utilisation de `fetch()` + `async/await`
-- Animation d’apparition progressive avec `setTimeout`
-- Couleur des cartes adaptée au type principal
+* Affichage dynamique des 151 Pokémon via `fetch` + `async/await`
+* Animation d'apparition décalée au chargement (`setTimeout`)
+* Couleur de fond adaptée au type principal de chaque Pokémon
 
----
+### 🔍 Recherche & Filtres
 
-## 🔍 Recherche & Filtres
+* Recherche en temps réel (nom FR, nom EN, numéro)
+* Filtres par type (Feu, Eau, Plante, Électrik, Psy, Normal)
+* État vide avec bouton de réinitialisation
 
-- Recherche temps réel :
-  - Nom FR
-  - Nom EN
-  - Numéro Pokédex
-- Filtres par type :
-  - Feu
-  - Eau
-  - Plante
-  - Électrik
-  - Psy
-  - Normal
-- Gestion d’état vide avec bouton de réinitialisation
+### 📄 Page de détail
 
----
+* Navigation via `URLSearchParams` (`detail.html?id=25`)
+* Stats avec barres animées progressivement (`setTimeout`)
+* Sprites rétro, talents, mensurations, description FR
+* Données espèce (catégorie, génération) depuis `pokemon-species`
 
-## 📄 Page de détail Pokémon
+### 🌙 Mode sombre / Mode clair
 
-- Navigation via `URLSearchParams`
-- Stats animées progressivement
-- Sprites rétro
-- Talents
-- Taille / poids
-- Description française
-- Données espèce via endpoint `pokemon-species`
+* Thème persisté en `localStorage`
+* Script inline anti-flash dans le `<head>`
+* Respect des préférences système (`prefers-color-scheme`)
 
----
+### ♿ Accessibilité WCAG AA
 
-## 🌙 Mode sombre / clair
+* `lang="fr"` sur `<html>`, `meta viewport`
+* `alt` sur toutes les images, `aria-live`, `aria-label`
+* Navigation clavier complète (`tabindex`, `keypress`, focus visible)
+* `role="progressbar"` sur les barres de stats
 
-- Thème sauvegardé avec `localStorage`
-- Détection des préférences système
-- Script anti-flash dans le `<head>`
+### 🔊 Audio
+
+* Son 8-bit généré via **Web Audio API** au clic sur une carte
+* Élément `<audio>` intégré dans le HTML (requis par le référentiel)
 
 ---
 
-## ♿ Accessibilité WCAG AA
+## 📂 Structure du projet
 
-- `lang="fr"`
-- `meta viewport`
-- `alt` sur toutes les images
-- `aria-live`
-- `aria-label`
-- Navigation clavier complète
-- Focus visible
-- `role="progressbar"` pour les statistiques
-
----
-
-## 🔊 Audio
-
-- Son 8-bit généré avec Web Audio API
-- Élément `<audio>` présent dans le HTML
-
----
-
-# 📂 Structure du projet
-
-```bash
+```
 pokedex/
 │
-├── index.html
-├── style.css
-├── package.json
-├── README.md
+├── index.html              → Page principale (grille de cartes)
+├── style.css               → CSS compilé depuis SASS
+├── package.json            → Config Node.js (scripts SASS)
+├── README.md               → Ce fichier
 │
 ├── sass/
-│   └── style.scss
+│   └── style.scss          → Source SASS (variables, nesting, mixins)
 │
 ├── js/
-│   ├── script.js
-│   ├── detail.js
-│   └── theme.js
+│   ├── script.js           → JS page principale (fetch, DOM, events)
+│   ├── detail.js           → JS page de détail
+│   └── theme.js            → Gestion mode sombre / clair
 │
 ├── pages/
-│   ├── detail.html
-│   └── about.html
+│   ├── detail.html         → Page de détail d'un Pokémon
+│   └── about.html          → Page À propos / tech stack
 │
 ├── design/
-│   ├── maquette pokedex.png
-│   ├── maquette pokedex2.png
-│   └── wireframe pokedex.png
+│   └── pokedex-maquettes-wireframes.pdf  → Maquettes & wireframes
 │
 └── docs/
-    ├── accueil.png
-    ├── accueil2.png
-    ├── detail.png
-    └── about.png
+    ├── accueil.png         → Capture page d'accueil
+    ├── accueil2.png        → Capture grille filtrée
+    ├── detail.png          → Capture page de détail
+    └── about.png           → Capture page À propos
 ```
 
 ---
 
-# 🛠️ Technologies utilisées
+## 🛠️ Technologies utilisées
 
 | Technologie | Rôle |
-|---|---|
-| HTML5 sémantique | Structure du site |
-| SASS / SCSS | Architecture CSS |
-| CSS Grid & Flexbox | Responsive layout |
-| JavaScript ES6+ | Dynamique & interactions |
-| PokéAPI | Source de données |
-| Web Audio API | Audio 8-bit |
-| Google Fonts | Typographie |
-| WCAG AA | Accessibilité |
-| BEM | Convention CSS |
+| --- | --- |
+| **HTML5 sémantique** | Structure (`header`, `nav`, `main`, `section`, `article`, `footer`) |
+| **SASS / SCSS** | Variables, nesting BEM, mixins, boucle `@each`, compilation |
+| **CSS Grid + Flexbox** | Layout responsive mobile-first |
+| **JavaScript ES6+** | Fetch, async/await, DOM, events, timers, URLSearchParams |
+| **PokéAPI** | Source de données JSON (REST publique, sans clé) |
+| **Google Fonts** | Silkscreen (titres) + DM Sans (corps) |
+| **Web Audio API** | Son 8-bit généré dynamiquement |
+| **WCAG AA** | Accessibilité complète |
+| **BEM** | Convention de nommage CSS |
 
 ---
 
-# 🚀 Installation & lancement
+## 🚀 Installation & lancement
 
-## 📦 Prérequis
+### Prérequis
 
-- Node.js
-- Navigateur moderne
-- Live Server recommandé
+* Node.js installé
+* Navigateur moderne
 
----
-
-## 🔧 Installation
+### Installation
 
 ```bash
-git clone https://github.com/alexis-noiret/pokedex.git
+# Cloner le dépôt
+git clone https://github.com/alexis-noiret/pokedex-bloc2.git
+cd pokedex-bloc2
 
-cd pokedex
-
+# Installer les dépendances
 npm install
 ```
 
----
-
-## 🎨 Compilation SASS
-
-### Compiler une fois
+### Compilation SASS
 
 ```bash
+# Compiler une fois
 npm run sass:build
-```
 
-### Compiler automatiquement
-
-```bash
+# Compiler automatiquement à chaque modification
 npm run sass
 ```
 
----
+### Lancement
 
-## ▶️ Lancement
-
-Ouvrir `index.html` avec Live Server.
+Ouvrir `index.html` dans un navigateur (Live Server recommandé).
 
 ---
 
-# ✅ Compétences Bloc 2 démontrées
+## ✅ Compétences Bloc 2 démontrées
 
-## 🧱 HTML sémantique
+### Découpage maquette → HTML sémantique
 
-Utilisation cohérente des balises :
+Balises `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>` avec hiérarchie de titres `<h1>` → `<h2>`. Structure argumentée et cohérente.
 
-- `<header>`
-- `<nav>`
-- `<main>`
-- `<section>`
-- `<article>`
-- `<footer>`
+### Actifs audio/vidéo
 
-Hiérarchie logique des titres `<h1>` → `<h2>`.
+Élément `<audio>` intégré dans le HTML. Son généré dynamiquement via Web Audio API.
 
----
+### Police importée
 
-## 📱 Responsive Design
+Google Fonts : **Silkscreen** (display/titres) + **DM Sans** (corps du texte).
 
-Approche mobile-first :
+### Responsive Mobile-first
 
-- Mobile → `repeat(2, 1fr)`
-- ≥ 480px → `repeat(3, 1fr)`
-- ≥ 768px → `repeat(4, 1fr)`
-- ≥ 1024px → `repeat(6, 1fr)`
+Media queries ordonnées du mobile vers le desktop :
 
----
+* Mobile : `grid-template-columns: repeat(2, 1fr)`
+* Tablette (≥ 480px) : `repeat(3, 1fr)`
+* Tablette large (≥ 768px) : `repeat(4, 1fr)`
+* Desktop (≥ 1024px) : `repeat(6, 1fr)`
 
-## 🎨 SASS / SCSS
+### Préprocesseur SASS
 
-- Variables
-- Nesting
-- Mixins
-- Boucles `@each`
-- Architecture BEM
+* Variables (`$color-bg`, `$font-display`, `$radius-md`…)
+* Nesting BEM (`.card { &__name {} &:hover {} }`)
+* Boucle `@each` pour les couleurs de types
+* Mixins (`@mixin flex-center`, `@mixin card-base`, `@mixin sr-only`)
 
----
+### Manipulation DOM
 
-## ⚡ JavaScript ES6+
+* `document.getElementById()`, `querySelectorAll()`
+* `document.createElement()`, `appendChild()`
+* `addEventListener()` (click, input, keypress)
+* `setTimeout()` pour les animations décalées
 
-- `fetch()`
-- `async/await`
-- `Promise.all()`
-- `setTimeout()`
-- Manipulation DOM
-- Événements
-- `URLSearchParams`
+### Communication asynchrone avec un serveur
 
----
+* `fetch()` + `async/await` vers PokéAPI
+* `Promise.all()` pour les requêtes parallèles
+* `URLSearchParams` pour passer l'ID via l'URL
+* Gestion des erreurs avec `try/catch`
 
-## 🌐 Communication asynchrone
+### Accessibilité WCAG AA
 
-Endpoints utilisés :
-
-```txt
-GET /pokemon?limit=151&offset=0
-GET /pokemon/{id}
-GET /pokemon-species/{id}
-```
-
-Gestion des erreurs avec `try/catch`.
+* `lang="fr"` sur `<html>`, `meta viewport`
+* `alt` sur toutes les images
+* `aria-live="polite"`, `aria-label`, `role="progressbar"`
+* `tabindex="0"` + `keypress` sur les cartes
+* Focus visible (outline 3px)
+* Compatible validation W3C
 
 ---
 
-## ♿ Accessibilité WCAG AA
+## 🌐 API utilisée
 
-- Navigation clavier
-- Focus visible
-- Contrastes lisibles
-- Attributs ARIA
-- Validation W3C
+**PokéAPI** — https://pokeapi.co
 
----
-
-# 🌐 API utilisée
-
-## PokéAPI
-
-🔗 https://pokeapi.co
-
-- API REST publique
-- Gratuite
-- Sans authentification
-- Réponses JSON
+* Gratuite, sans clé, sans authentification
+* REST, réponses JSON
+* Endpoints utilisés :
+  + `GET /pokemon?limit=151&offset=0` → liste génération 1
+  + `GET /pokemon/{id}` → stats, types, sprites, talents
+  + `GET /pokemon-species/{id}` → description FR et données espèce
 
 ---
 
-# 📸 Aperçu de l’application
+## 📸 Aperçu
 
-## 🏠 Page d’accueil
+### 🏠 Page d'accueil — Grille des Pokémon
 
-![Accueil](docs/accueil.png)
+![Accueil](./docs/accueil.png)
 
----
+### 🔍 Page de détail
 
-## 🔍 Page détail Pokémon
+![Détail Pokémon](./docs/accueil2.png)
 
-![Détail Pokémon](docs/detail.png)
+### 📄 Grille filtrée
 
----
+![Grille filtrée](./docs/detail.png)
 
-## 📄 Grille filtrée
+### ℹ️ Page À propos
 
-![Grille filtrée](docs/accueil2.png)
-
----
-
-## ℹ️ Page À propos
-
-![À propos](docs/about.png)
+![À propos](./docs/about.png)
 
 ---
 
-# 👨‍💻 Auteur
+## 👨‍💻 Auteur
 
-## Alexis Noiret
-
+**Alexis Noiret**
 🎓 Étudiant en Bachelor IT — La Plateforme
-
-🔗 GitHub :  
-https://github.com/alexis-noiret
+🔗 GitHub : https://github.com/alexis-noiret
 
 ---
 
-# 🎓 Contexte pédagogique
+## 🎓 Contexte pédagogique
 
-Projet réalisé dans le cadre du :
-
-**Titre RNCP N°37273 — Développeur Web Full Stack — Niveau 5 (Bac+2)**
-
-## Bloc 2
-
-Développer des interfaces Frontend pour un site ou une application Web/Web Mobile.
-
-🏫 École : **La Plateforme — La grande école du numérique pour tous**
+Projet réalisé dans le cadre du **Titre RNCP N°37273 — Développeur Web Full Stack — Niveau 5 (Bac+2)**
+**Bloc 2 :** Développer des interfaces Frontend pour un site ou une application Web/Web Mobile
+**École :** La Plateforme — La grande école du numérique pour tous
 
 ---
 
-# ⚠️ Disclaimer
+## ⚠️ Disclaimer
 
-Projet réalisé à des fins pédagogiques.
-
-Pokémon © Nintendo / Game Freak.
-
-Données fournies par PokéAPI.
+Projet réalisé à des fins pédagogiques. Pokémon © Nintendo / Game Freak. Données fournies par PokéAPI.
