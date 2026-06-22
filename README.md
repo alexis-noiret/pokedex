@@ -104,7 +104,7 @@ pokedex/
 │
 └── docs/
     ├── accueil.png         → Capture page d'accueil
-    ├── accueil2.png        → Capture grille filtrée
+    ├── listing.png        → Capture grille filtrée
     ├── detail.png          → Capture page de détail
     └── about.png           → Capture page À propos
 ```
@@ -224,7 +224,7 @@ Media queries ordonnées du mobile vers le desktop :
 
 ### 📋 Grille filtrée
 
-![Grille filtrée](./docs/accueil2.png)
+![Grille filtrée](./docs/listing.png)
 
 ### 🔍 Page de détail
 
