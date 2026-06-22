@@ -4,23 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>À propos — PokéDex</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="../style.css">
-  <!-- Script inline anti-flash thème (doit être dans le <head>) -->
+
   <script>
-    (function() {
-      var saved = localStorage.getItem('pokedex-theme');
-      var preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-      var theme = saved || (preferLight ? 'light' : 'dark');
-      if (theme === 'light') document.documentElement.classList.add('light');
-    })();
+    var saved = localStorage.getItem('pokedex-theme');
+    if (saved === 'light') {
+      document.documentElement.classList.add('light');
+    }
   </script>
-  <style>
-    /* Transitions activées seulement après chargement (évite le flash) */
-    .theme-ready, .theme-ready * { transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important; }
-  </style>
 </head>
 <body>
   <header class="header">
@@ -34,7 +30,7 @@
         <li><a href="about.html" class="navbar__link navbar__link--active">À propos</a></li>
       </ul>
       <div class="navbar__controls">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème" title="Mode clair / Mode sombre">🌙</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème" title="Mode clair / Mode sombre"></button>
       </div>
     </nav>
   </header>
@@ -51,11 +47,11 @@
             <h2 class="about__subtitle">Le projet</h2>
             <p class="about__text">
               Ce Pokédex est un projet pédagogique réalisé dans le cadre du titre RNCP
-              <strong>Développeur Web Full Stack</strong> — Bloc 2, à La Plateforme.
+              <strong style="color: #000000; font-weight: 700;">Développeur Web Front-End</strong> — Bloc 2, à La Plateforme.
             </p>
             <p class="about__text">
               Il affiche les 151 Pokémon de la première génération en consommant
-              l'API publique <strong>PokéAPI</strong>, sans clé d'authentification requise.
+              l'API publique <strong style="color: #000000; font-weight: 700;">PokéAPI</strong>, sans clé d'authentification requise.
             </p>
           </div>
 
@@ -112,6 +108,7 @@
       </p>
     </div>
   </footer>
+
   <script src="../js/theme.js"></script>
 </body>
 </html>

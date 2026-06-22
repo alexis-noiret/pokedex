@@ -6,30 +6,21 @@
   <meta name="description" content="Explorez le monde des Pokémon — un Pokédex interactif moderne">
   <title>PokéDex — Explorer tous les Pokémon</title>
 
-  <!-- Police importée : Silkscreen (display) + DM Sans (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 
-  <!-- CSS compilé depuis SASS -->
   <link rel="stylesheet" href="style.css">
-  <!-- Script inline anti-flash thème (doit être dans le <head>) -->
+
   <script>
-    (function() {
-      var saved = localStorage.getItem('pokedex-theme');
-      var preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-      var theme = saved || (preferLight ? 'light' : 'dark');
-      if (theme === 'light') document.documentElement.classList.add('light');
-    })();
+    var saved = localStorage.getItem('pokedex-theme');
+    if (saved === 'light') {
+      document.documentElement.classList.add('light');
+    }
   </script>
-  <style>
-    /* Transitions activées seulement après chargement (évite le flash) */
-    .theme-ready, .theme-ready * { transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important; }
-  </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <header class="header">
     <nav class="navbar">
       <a href="index.html" class="navbar__brand" aria-label="Retour à l'accueil">
@@ -41,7 +32,7 @@
         <li><a href="pages/about.html" class="navbar__link">À propos</a></li>
       </ul>
       <div class="navbar__controls">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème" title="Mode clair / Mode sombre">🌙</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème" title="Mode clair / Mode sombre"></button>
         <button class="navbar__toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
           <span></span><span></span><span></span>
         </button>
@@ -49,7 +40,6 @@
     </nav>
   </header>
 
-  <!-- HERO -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__bg" aria-hidden="true">
       <div class="hero__orb hero__orb--1"></div>
@@ -73,7 +63,6 @@
     </div>
   </section>
 
-  <!-- FILTRES -->
   <section class="filters" id="pokedex" aria-label="Filtres et recherche">
     <div class="container">
       <div class="filters__bar">
@@ -102,10 +91,8 @@
     </div>
   </section>
 
-  <!-- GRILLE PRINCIPALE -->
   <main class="main" id="main-content">
     <div class="container">
-      <!-- Loader -->
       <div class="loader" id="loader" role="status" aria-label="Chargement des Pokémon">
         <div class="loader__pokeball">
           <div class="loader__top"></div>
@@ -115,7 +102,6 @@
         <p class="loader__text">Chargement du Pokédex<span class="loader__dots"></span></p>
       </div>
 
-      <!-- Grille de cartes -->
       <section
         id="pokemon-grid"
         class="pokemon-grid"
@@ -123,7 +109,6 @@
         aria-live="polite"
       ></section>
 
-      <!-- Message vide -->
       <div class="empty-state" id="empty-state" hidden>
         <p class="empty-state__text">Aucun Pokémon trouvé 😅</p>
         <button class="btn btn--secondary" id="reset-btn">Réinitialiser</button>
@@ -131,7 +116,6 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <p class="footer__text">
@@ -141,7 +125,6 @@
     </div>
   </footer>
 
-  <!-- Son audio caché (actif audio requis par le jury) -->
   <audio id="click-sound" preload="auto" aria-hidden="true">
     <source src="docs/click.mp3" type="audio/mpeg">
   </audio>

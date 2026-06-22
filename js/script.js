@@ -1,311 +1,217 @@
-// ============================================================
-// script.js — Page principale du Pokédex
-// Compétences démontrées :
-//   - fetch + async/await (communication asynchrone)
-//   - Manipulation DOM (sélecteurs, création d'éléments)
-//   - Événements (click, input, keypress)
-//   - Timers (setTimeout pour les animations décalées)
-// ============================================================
+var API_URL = 'https://pokeapi.co/api/v2/pokemon';
+var SPECIES_URL = 'https://pokeapi.co/api/v2/pokemon-species';
 
-// ---- CONSTANTES API ----
-const API_BASE   = 'https://pokeapi.co/api/v2';
-const TOTAL_POKEMON = 151; // Génération 1
+var typesFr = {
+  normal: 'Normal',
+  fire: 'Feu',
+  water: 'Eau',
+  grass: 'Plante',
+  electric: 'Electrik',
+  ice: 'Glace',
+  fighting: 'Combat',
+  poison: 'Poison',
+  ground: 'Sol',
+  flying: 'Vol',
+  psychic: 'Psy',
+  bug: 'Insecte',
+  rock: 'Roche',
+  ghost: 'Spectre',
+  dragon: 'Dragon',
+  dark: 'Tenebres',
+  steel: 'Acier',
+  fairy: 'Fee'
+};
 
-// ---- SÉLECTEURS DOM ----
-const grid        = document.getElementById('pokemon-grid');
-const loader      = document.getElementById('loader');
-const countEl     = document.getElementById('pokemon-count');
-const emptyState  = document.getElementById('empty-state');
-const searchInput = document.getElementById('search-input');
-const resetBtn    = document.getElementById('reset-btn');
-const filterBtns  = document.querySelectorAll('.filter-btn');
-const navToggle   = document.querySelector('.navbar__toggle');
-const navLinks    = document.querySelector('.navbar__links');
+var typesColors = {
+  normal: 'rgba(159, 161, 159, 0.6)',
+  fire: 'rgba(230, 40, 41, 0.6)',
+  water: 'rgba(41, 128, 239, 0.6)',
+  grass: 'rgba(63, 161, 41, 0.6)',
+  electric: 'rgba(250, 192, 0, 0.6)',
+  ice: 'rgba(61, 206, 243, 0.6)',
+  fighting: 'rgba(255, 128, 0, 0.6)',
+  poison: 'rgba(145, 65, 203, 0.6)',
+  ground: 'rgba(145, 81, 33, 0.6)',
+  flying: 'rgba(129, 185, 239, 0.6)',
+  psychic: 'rgba(239, 65, 121, 0.6)',
+  bug: 'rgba(145, 161, 25, 0.6)',
+  rock: 'rgba(175, 169, 129, 0.6)',
+  ghost: 'rgba(112, 65, 112, 0.6)',
+  dragon: 'rgba(80, 96, 225, 0.6)',
+  dark: 'rgba(98, 77, 78, 0.6)',
+  steel: 'rgba(96, 161, 184, 0.6)',
+  fairy: 'rgba(239, 112, 239, 0.6)'
+};
 
-// ---- STATE ----
-let allPokemon     = [];   // liste complète chargée une seule fois
-let filteredPokemon = [];  // liste après filtres
-let activeType     = 'all';
-let searchQuery    = '';
+var grid = document.getElementById('pokemon-grid');
+var loader = document.getElementById('loader');
+var compteur = document.getElementById('pokemon-count');
+var emptyState = document.getElementById('empty-state');
+var searchInput = document.getElementById('search-input');
+var resetBtn = document.getElementById('reset-btn');
+var filterBtns = document.querySelectorAll('.filter-btn');
+var navToggle = document.querySelector('.navbar__toggle');
+var navLinks = document.querySelector('.navbar__links');
 
-// ============================================================
-// SON — Généré via Web Audio API
-// Safari exige que l'AudioContext soit créé ET resume()
-// directement dans le gestionnaire de clic (pas en dehors)
-// ============================================================
-function playClickSound() {
-  try {
-    // Création dans le handler de clic = compatible Safari
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+var listePokemon = [];
+var filtre = 'all';
+var recherche = '';
 
-    ctx.resume().then(() => {
-      const now = ctx.currentTime;
-
-      // Note 1 : montée rapide style 8-bit
-      const osc1  = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.type = 'square';
-      osc1.frequency.setValueAtTime(440, now);
-      osc1.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-      gain1.gain.setValueAtTime(0.12, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-      osc1.start(now);
-      osc1.stop(now + 0.14);
-
-      // Note 2 : confirmation
-      const osc2  = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.type = 'square';
-      osc2.frequency.setValueAtTime(1320, now + 0.12);
-      gain2.gain.setValueAtTime(0.08, now + 0.12);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
-      osc2.start(now + 0.12);
-      osc2.stop(now + 0.24);
-    });
-  } catch (e) {
-    // Web Audio non supporté — silencieux
-  }
-}
-
-// ============================================================
-// FETCH — Récupérer tous les Pokémon de gen 1
-// ============================================================
-async function fetchAllPokemon() {
-  showLoader(true);
+async function chargerPokemon() {
+  loader.hidden = false;
+  grid.hidden = true;
 
   try {
-    // 1. Récupère la liste des 151 Pokémon
-    const listRes  = await fetch(`${API_BASE}/pokemon?limit=${TOTAL_POKEMON}&offset=0`);
-    const listData = await listRes.json();
+    var res = await fetch(API_URL + '?limit=151');
+    var data = await res.json();
+    var liste = data.results;
 
-    // 2. Récupère détails + species en parallèle pour chaque Pokémon
-    //    species contient le nom français dans data.names
-    const promises = listData.results.map(async (p) => {
-      const [pokemon, species] = await Promise.all([
-        fetch(p.url).then(r => r.json()),
-        fetch(`${API_BASE}/pokemon-species/${p.url.split('/').filter(Boolean).pop()}`).then(r => r.json())
-      ]);
-      // Injecte le nom FR directement sur l'objet pokemon
-      const frName = species.names?.find(n => n.language.name === 'fr');
-      pokemon.nameFr = frName?.name || capitalize(pokemon.name);
-      return pokemon;
-    });
+    for (var i = 0; i < liste.length; i++) {
+      var resPokemon = await fetch(liste[i].url);
+      var pokemon = await resPokemon.json();
 
-    allPokemon = await Promise.all(promises);
+      var resSpecies = await fetch(SPECIES_URL + '/' + pokemon.id);
+      var species = await resSpecies.json();
 
-    filteredPokemon = [...allPokemon];
-    renderGrid(filteredPokemon, true); // true = animation décalée au 1er chargement
+      var nomFr = pokemon.name;
+      for (var j = 0; j < species.names.length; j++) {
+        if (species.names[j].language.name === 'fr') {
+          nomFr = species.names[j].name;
+          break;
+        }
+      }
 
-  } catch (err) {
-    console.error('Erreur lors du chargement du Pokédex :', err);
-    grid.innerHTML = `<p class="empty-state__text">Erreur de connexion à PokéAPI 😢</p>`;
-  } finally {
-    showLoader(false);
+      pokemon.nomFr = nomFr;
+      listePokemon.push(pokemon);
+    }
+
+    afficherGrille(listePokemon, true);
+
+  } catch(e) {
+    grid.innerHTML = '<p class="empty-state__text">Erreur de connexion 😢</p>';
   }
+
+  loader.hidden = true;
+  grid.hidden = false;
 }
 
-// ============================================================
-// AFFICHAGE — Créer les cartes Pokémon
-// isInitialLoad : true = animation décalée (chargement initial)
-//                 false = rendu immédiat (filtres/recherche)
-// ============================================================
-function renderGrid(pokemonList, isInitialLoad = false) {
-  // Fixer la hauteur du conteneur avant de vider pour éviter le saut de page
-  grid.style.minHeight = grid.offsetHeight + 'px';
+function afficherGrille(liste, anime) {
   grid.innerHTML = '';
   emptyState.hidden = true;
 
-  if (pokemonList.length === 0) {
-    grid.style.minHeight = '';
+  if (liste.length === 0) {
     emptyState.hidden = false;
-    updateCount(0);
+    compteur.textContent = '0 Pokémon affiché';
     return;
   }
 
-  if (isInitialLoad) {
-    // Chargement initial : animation d'apparition décalée (timer — compétence requise)
-    pokemonList.forEach((pokemon, index) => {
-      setTimeout(() => {
-        const card = createCard(pokemon);
-        grid.appendChild(card);
-        // Libérer la hauteur fixe une fois la dernière carte insérée
-        if (index === pokemonList.length - 1) {
-          setTimeout(() => { grid.style.minHeight = ''; }, 50);
-        }
-      }, index * 25);
-    });
+  if (anime) {
+    for (var i = 0; i < liste.length; i++) {
+      setTimeout(function(p) {
+        return function() {
+          grid.appendChild(creerCarte(p));
+        };
+      }(liste[i]), i * 30);
+    }
   } else {
-    // Filtres / recherche : rendu immédiat sans saut de page
-    const fragment = document.createDocumentFragment();
-    pokemonList.forEach(pokemon => {
-      fragment.appendChild(createCard(pokemon));
-    });
-    grid.appendChild(fragment);
-    grid.style.minHeight = '';
+    for (var i = 0; i < liste.length; i++) {
+      grid.appendChild(creerCarte(liste[i]));
+    }
   }
 
-  updateCount(pokemonList.length);
+  var nb = liste.length;
+  compteur.textContent = nb + ' Pokémon affiché' + (nb > 1 ? 's' : '');
 }
 
-function createCard(pokemon) {
-  const card = document.createElement('article');
+function creerCarte(pokemon) {
+  var card = document.createElement('article');
   card.classList.add('card');
-  card.setAttribute('tabindex', '0');  // accessibilité clavier
+  card.setAttribute('tabindex', '0');
   card.setAttribute('role', 'button');
-  card.setAttribute('aria-label', `Voir les détails de ${pokemon.nameFr}`);
+  card.setAttribute('aria-label', 'Voir les détails de ' + pokemon.nomFr);
 
-  const types   = pokemon.types.map(t => t.type.name);
-  const number  = String(pokemon.id).padStart(3, '0');
-  const sprite  = pokemon.sprites.other['official-artwork'].front_default
-                || pokemon.sprites.front_default;
+  var types = pokemon.types.map(function(t) { return t.type.name; });
+  var numero = String(pokemon.id).padStart(3, '0');
+  var image = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
+  var couleur = typesColors[types[0]] || 'rgba(255,255,255,0.1)';
 
-  // Couleur de fond selon le type principal
-  const mainType    = types[0];
-  const typeColors  = getTypeColor(mainType);
+  var badgesTypes = '';
+  for (var i = 0; i < types.length; i++) {
+    var t = types[i];
+    badgesTypes += '<span class="type-badge type-badge--' + t + '">' + (typesFr[t] || t) + '</span>';
+  }
 
-  card.innerHTML = `
-    <div class="card__bg" style="background: radial-gradient(circle at 60% 30%, ${typeColors}, transparent)"></div>
-    <span class="card__number">#${number}</span>
-    <div class="card__image-wrap">
-      <img
-        class="card__image"
-        src="${sprite}"
-        alt="${pokemon.nameFr}"
-        loading="lazy"
-        width="90"
-        height="90"
-      >
-    </div>
-    <h2 class="card__name">${pokemon.nameFr}</h2>
-    <div class="card__types">
-      ${types.map(t => `<span class="type-badge type-badge--${t}">${t}</span>`).join('')}
-    </div>
-  `;
+  card.innerHTML = '<div class="card__bg" style="background: radial-gradient(circle at 60% 30%, ' + couleur + ', transparent)"></div>'
+    + '<span class="card__number">#' + numero + '</span>'
+    + '<div class="card__image-wrap"><img class="card__image" src="' + image + '" alt="' + pokemon.nomFr + '" loading="lazy" width="90" height="90"></div>'
+    + '<h2 class="card__name">' + pokemon.nomFr + '</h2>'
+    + '<div class="card__types">' + badgesTypes + '</div>';
 
-  // Événement clic → son + page de détail (délai 250ms pour laisser le son jouer)
-  card.addEventListener('click', () => {
-    playClickSound();
-    setTimeout(() => navigateToDetail(pokemon.id), 250);
+  card.addEventListener('click', function() {
+    window.location.href = 'pages/detail.html?id=' + pokemon.id;
   });
 
-  // Événement clavier (accessibilité WCAG)
-  card.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      navigateToDetail(pokemon.id);
+  card.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      window.location.href = 'pages/detail.html?id=' + pokemon.id;
     }
   });
 
   return card;
 }
 
-// ============================================================
-// NAVIGATION → page de détail avec paramètre URL
-// ============================================================
-function navigateToDetail(id) {
-  window.location.href = `pages/detail.html?id=${id}`;
+function filtrer() {
+  var resultat = [];
+
+  for (var i = 0; i < listePokemon.length; i++) {
+    var pokemon = listePokemon[i];
+    var types = pokemon.types.map(function(t) { return t.type.name; });
+
+    var okType = filtre === 'all' || types.indexOf(filtre) !== -1;
+    var okRecherche = pokemon.name.indexOf(recherche) !== -1
+      || pokemon.nomFr.toLowerCase().indexOf(recherche) !== -1
+      || String(pokemon.id).indexOf(recherche) !== -1;
+
+    if (okType && okRecherche) {
+      resultat.push(pokemon);
+    }
+  }
+
+  afficherGrille(resultat, false);
 }
 
-// ============================================================
-// FILTRES PAR TYPE
-// ============================================================
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    // Mise à jour de l'état actif
-    filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
-    btn.classList.add('filter-btn--active');
-
-    activeType = btn.dataset.type;
-    applyFilters();
+for (var i = 0; i < filterBtns.length; i++) {
+  filterBtns[i].addEventListener('click', function() {
+    for (var j = 0; j < filterBtns.length; j++) {
+      filterBtns[j].classList.remove('filter-btn--active');
+    }
+    this.classList.add('filter-btn--active');
+    filtre = this.dataset.type;
+    filtrer();
   });
-});
-
-// ============================================================
-// RECHERCHE (événement input)
-// ============================================================
-searchInput.addEventListener('input', (e) => {
-  searchQuery = e.target.value.toLowerCase().trim();
-  applyFilters();
-});
-
-// ============================================================
-// APPLICATION DES FILTRES (type + recherche)
-// ============================================================
-function applyFilters() {
-  filteredPokemon = allPokemon.filter(pokemon => {
-    const types   = pokemon.types.map(t => t.type.name);
-    const matchType   = activeType === 'all' || types.includes(activeType);
-    const matchSearch = pokemon.name.includes(searchQuery)
-                     || pokemon.nameFr.toLowerCase().includes(searchQuery)
-                     || String(pokemon.id).includes(searchQuery);
-    return matchType && matchSearch;
-  });
-
-  renderGrid(filteredPokemon);
 }
 
-// Réinitialisation depuis le bouton "empty state"
-resetBtn.addEventListener('click', () => {
+searchInput.addEventListener('input', function() {
+  recherche = searchInput.value.toLowerCase().trim();
+  filtrer();
+});
+
+resetBtn.addEventListener('click', function() {
   searchInput.value = '';
-  searchQuery = '';
-  activeType  = 'all';
-  filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
+  recherche = '';
+  filtre = 'all';
+  for (var i = 0; i < filterBtns.length; i++) {
+    filterBtns[i].classList.remove('filter-btn--active');
+  }
   filterBtns[0].classList.add('filter-btn--active');
-  applyFilters();
+  filtrer();
 });
 
-// ============================================================
-// MENU MOBILE (événement click + aria)
-// ============================================================
 if (navToggle) {
-  navToggle.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('navbar__links--open');
-    navToggle.setAttribute('aria-expanded', isOpen);
+  navToggle.addEventListener('click', function() {
+    var ouvert = navLinks.classList.toggle('navbar__links--open');
+    navToggle.setAttribute('aria-expanded', ouvert);
   });
 }
 
-// ============================================================
-// UTILITAIRES
-// ============================================================
-function showLoader(show) {
-  loader.hidden  = !show;
-  grid.hidden    = show;
-}
-
-function updateCount(count) {
-  countEl.textContent = `${count} Pokémon affiché${count > 1 ? 's' : ''}`;
-}
-
-// Couleurs hex pour le fond des cartes (dégradé)
-function getTypeColor(type) {
-  const colors = {
-    normal  : 'rgba(159, 161, 159, 0.6)',
-    fire    : 'rgba(230, 40, 41, 0.6)',
-    water   : 'rgba(41, 128, 239, 0.6)',
-    grass   : 'rgba(63, 161, 41, 0.6)',
-    electric: 'rgba(250, 192, 0, 0.6)',
-    ice     : 'rgba(61, 206, 243, 0.6)',
-    fighting: 'rgba(255, 128, 0, 0.6)',
-    poison  : 'rgba(145, 65, 203, 0.6)',
-    ground  : 'rgba(145, 81, 33, 0.6)',
-    flying  : 'rgba(129, 185, 239, 0.6)',
-    psychic : 'rgba(239, 65, 121, 0.6)',
-    bug     : 'rgba(145, 161, 25, 0.6)',
-    rock    : 'rgba(175, 169, 129, 0.6)',
-    ghost   : 'rgba(112, 65, 112, 0.6)',
-    dragon  : 'rgba(80, 96, 225, 0.6)',
-    dark    : 'rgba(98, 77, 78, 0.6)',
-    steel   : 'rgba(96, 161, 184, 0.6)',
-    fairy   : 'rgba(239, 112, 239, 0.6)',
-  };
-  return colors[type] || 'rgba(255,255,255,0.1)';
-}
-
-// ============================================================
-// INITIALISATION
-// ============================================================
-fetchAllPokemon();
+chargerPokemon();

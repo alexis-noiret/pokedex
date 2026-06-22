@@ -60,14 +60,13 @@ $type-colors: (
 
 @mixin card-base {
   background: $color-surface;
-  border: 1px solid $color-border;
+  border: none;
   border-radius: $radius-md;
-  transition: transform $transition-base, box-shadow $transition-base, border-color $transition-base;
+  transition: transform $transition-base, box-shadow $transition-base;
 
   &:hover {
     transform: translateY(-4px);
     box-shadow: $shadow-card;
-    border-color: rgba(255, 215, 0, 0.3);
   }
 }
 
@@ -111,6 +110,128 @@ body {
 // Accessibilité — classe utilitaire
 .sr-only { @include sr-only; }
 
+// ============================================================
+// MODE CLAIR — html.light appliqué par theme.js
+// ============================================================
+html.light {
+
+  body {
+    background-color: #f4f6fb;
+    color: #1a1d2e;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(255, 70, 85, 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(41, 128, 239, 0.07) 0%, transparent 60%);
+  }
+
+  // HEADER / NAV
+  .header {
+    background: rgba(244, 246, 251, 0.92);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+  }
+
+  .navbar__title,
+  .navbar__link { color: #1a1d2e; }
+
+  .navbar__link--active { color: #FF4655; }
+
+  .navbar__logo { color: #FF4655; }
+
+  .navbar__toggle span { background: #1a1d2e; }
+
+  // HERO
+  .hero__eyebrow { color: #cc1f20; }
+  .hero__title   { color: #1a1d2e; }
+  .hero__desc    { color: #4a5168; }
+
+  // FILTRES
+  .filters {
+    background: #eaecf4;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .filters__input {
+    background: #ffffff;
+    color: #1a1d2e;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+
+    &::placeholder { color: #9ca3af; }
+    &:focus { border-color: #FF4655; }
+  }
+
+  .filter-btn {
+    background: #ffffff;
+    color: #1a1d2e;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+
+    &:hover { border-color: #FF4655; color: #FF4655; }
+    &--active { background: #FF4655; color: #ffffff; border-color: #FF4655; }
+  }
+
+  .filters__count { color: #4a5168; }
+
+  // TYPE BADGES — couleurs solides opaques en mode clair
+  .type-badge {
+    color: #ffffff !important;
+
+    @each $type, $color in $type-colors {
+      &--#{$type} {
+        background: rgba($color, 0.85) !important;
+        color: #ffffff !important;
+        border: none !important;
+      }
+    }
+  }
+  --card-text-muted: #7a8099;
+
+  .card {
+    background: #ffffff !important;
+
+    &:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+  }
+
+  .card__bg     { opacity: 0.06 !important; }
+  .card__name   { color: #1a1d2e !important; }
+  .card__number { color: #7a8099 !important; }
+
+  // PAGE DÉTAIL
+  .detail__section { background: #ffffff; border-color: rgba(0, 0, 0, 0.08); }
+  .detail__section-title { color: #FF4655; }
+  .detail__name   { color: #1a1d2e; }
+  .detail__number { color: #7a8099; }
+  .detail__stat-label { color: #4a5168; }
+  .detail__stat-value { color: #1a1d2e; }
+  .detail__stat-bar   { background: #e5e7eb; }
+  .detail__measure span  { color: #4a5168; }
+  .detail__measure strong { color: #1a1d2e; }
+  .detail__ability { background: #f0f2f8; color: #1a1d2e; }
+  .back-link { color: #4a5168; &:hover { color: #FF4655; } }
+
+  // À PROPOS
+  .about__card { background: #ffffff; }
+  .about__title    { color: #1a1d2e; }
+  .about__subtitle { color: #FF4655; }
+  .about__text     { color: #4a5168; }
+  .about__tech-item { color: #4a5168; }
+  .about__skill    { background: #ffffff !important; border: 1px solid #cccccc !important; }
+  .about__skill strong { color: #000000 !important; font-weight: 700 !important; }
+  .about__skill p   { color: #4a5168 !important; }
+
+  // LOADER
+  .loader__text { color: #4a5168; }
+
+  // EMPTY STATE
+  .empty-state__text { color: #4a5168; }
+
+  // FOOTER
+  .footer {
+    background: #e2e5f0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .footer__text  { color: #4a5168; }
+  .footer__link  { color: #FF4655; }
+}
+
 // ---- CONTENEUR ----
 .container {
   width: 100%;
@@ -119,13 +240,12 @@ body {
 
   // Tablet
   @media (min-width: 768px) {
-    padding: 0 2rem;
+    padding: 0 1.5rem;
   }
 
   // Desktop
   @media (min-width: 1024px) {
-    max-width: 1280px;
-    padding: 0 3rem;
+    padding: 0 2rem;
   }
 }
 
@@ -143,16 +263,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  max-width: 1280px;
-  margin: 0 auto;
+  padding: 1rem 1rem;
 
   @media (min-width: 768px) {
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
   }
 
   @media (min-width: 1024px) {
-    padding: 1.25rem 3rem;
+    padding: 1.25rem 2rem;
   }
 
   &__brand {
@@ -248,7 +366,6 @@ body {
   align-items: center;
   justify-content: center;
   padding: 5rem 1.5rem 4rem;
-  overflow: hidden;
   gap: 3rem;
 
   @media (min-width: 768px) {
@@ -258,10 +375,10 @@ body {
   @media (min-width: 1024px) {
     flex-direction: row;
     justify-content: space-between;
-    max-width: 1280px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
     min-height: 90svh;
-    padding: 0 3rem;
+    padding: 0 5rem;
   }
 
   &__bg {
@@ -360,29 +477,22 @@ body {
   height: clamp(200px, 30vw, 320px);
   position: relative;
   animation: spin 20s linear infinite;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid rgba(255, 255, 255, 0.15);
 
   &__top {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     height: 50%;
     background: linear-gradient(135deg, $color-accent-2, darken($color-accent-2, 10%));
-    border-radius: 50% 50% 0 0;
-    border: 4px solid rgba(255,255,255,0.1);
-    border-bottom: none;
   }
 
   &__bottom {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     height: 50%;
     background: $color-surface-2;
-    border-radius: 0 0 50% 50%;
-    border: 4px solid rgba(255,255,255,0.1);
-    border-top: none;
   }
 
   &__center {
@@ -395,7 +505,7 @@ body {
     height: 60px;
     background: $color-bg;
     border-radius: 50%;
-    border: 6px solid rgba(255,255,255,0.15);
+    border: 6px solid rgba(255, 255, 255, 0.15);
     z-index: 2;
   }
 
@@ -404,7 +514,7 @@ body {
     height: 28px;
     background: $color-surface-2;
     border-radius: 50%;
-    border: 3px solid rgba(255,255,255,0.3);
+    border: 3px solid rgba(255, 255, 255, 0.3);
     animation: pulse 2s ease-in-out infinite;
   }
 }
@@ -442,7 +552,7 @@ body {
   &--secondary {
     background: $color-surface-2;
     color: $color-text;
-    border: 1px solid $color-border;
+  
 
     &:hover {
       background: $color-surface;
@@ -477,7 +587,7 @@ body {
     width: 100%;
     padding: 0.75rem 1.25rem;
     background: $color-surface;
-    border: 1px solid $color-border;
+  
     border-radius: $radius-full;
     color: $color-text;
     font-family: $font-body;
@@ -512,7 +622,7 @@ body {
 .filter-btn {
   padding: 0.4rem 0.9rem;
   border-radius: $radius-full;
-  border: 1px solid $color-border;
+
   background: $color-surface;
   color: $color-text-muted;
   font-family: $font-body;
@@ -605,7 +715,7 @@ body {
   &__number {
     font-family: $font-display;
     font-size: 0.6rem;
-    color: $color-text-muted;
+    color: var(--card-text-muted, #{$color-text-muted});
     letter-spacing: 0.1em;
     margin-bottom: 0.5rem;
     position: relative;
@@ -641,7 +751,7 @@ body {
   &__name {
     font-family: $font-display;
     font-size: 0.7rem;
-    color: $color-white;
+    color: var(--card-text, #{$color-white});
     letter-spacing: 0.05em;
     text-transform: capitalize;
     margin: 0.75rem 0 0.5rem;
@@ -692,6 +802,9 @@ body {
     height: 60px;
     position: relative;
     animation: spin 1.2s linear infinite;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(255,255,255,0.2);
   }
 
   &__top {
@@ -699,9 +812,6 @@ body {
     top: 0; left: 0; right: 0;
     height: 50%;
     background: $color-accent-2;
-    border-radius: 50% 50% 0 0;
-    border: 3px solid rgba(255,255,255,0.2);
-    border-bottom: none;
   }
 
   &__bottom {
@@ -709,9 +819,6 @@ body {
     bottom: 0; left: 0; right: 0;
     height: 50%;
     background: $color-surface-2;
-    border-radius: 0 0 50% 50%;
-    border: 3px solid rgba(255,255,255,0.2);
-    border-top: none;
   }
 
   &__center {
@@ -755,8 +862,7 @@ body {
 
 // ---- PAGE DÉTAIL ----
 .detail {
-  max-width: 860px;
-  margin: 0 auto;
+  width: 100%;
   animation: fadeInUp 0.6s ease both;
 
   &__hero {
@@ -925,7 +1031,7 @@ body {
   &__ability {
     padding: 0.4rem 1rem;
     background: $color-surface-2;
-    border: 1px solid $color-border;
+  
     border-radius: $radius-full;
     font-size: 0.82rem;
     text-transform: capitalize;
@@ -993,7 +1099,7 @@ body {
   text-decoration: none;
   margin-bottom: 2.5rem;
   padding: 0.5rem 1rem;
-  border: 1px solid $color-border;
+
   border-radius: $radius-full;
   transition: all $transition-base;
 
@@ -1010,8 +1116,7 @@ body {
 
 // ---- PAGE ABOUT ----
 .about {
-  max-width: 960px;
-  margin: 0 auto;
+  width: 100%;
 
   &__title {
     font-family: $font-display;
@@ -1094,7 +1199,7 @@ body {
     padding: 1.25rem;
     background: $color-surface-2;
     border-radius: $radius-md;
-    border: 1px solid $color-border;
+  
 
     strong {
       display: block;
