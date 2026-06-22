@@ -195,9 +195,9 @@ pokedex/
 ## 🔧 Installation
 
 ```bash
-git clone https://github.com/alexis-noiret/pokedex-bloc2.git
+git clone https://github.com/alexis-noiret/pokedex.git
 
-cd pokedex-bloc2
+cd pokedex
 
 npm install
 ```
