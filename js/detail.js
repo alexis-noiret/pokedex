@@ -1,7 +1,7 @@
-var API_URL = 'https://pokeapi.co/api/v2/pokemon';
-var SPECIES_URL = 'https://pokeapi.co/api/v2/pokemon-species';
+const API_URL = 'https://pokeapi.co/api/v2/pokemon';
+const SPECIES_URL = 'https://pokeapi.co/api/v2/pokemon-species';
 
-var typesFr = {
+const typesFr = {
   normal: 'Normal',
   fire: 'Feu',
   water: 'Eau',
@@ -22,7 +22,7 @@ var typesFr = {
   fairy: 'Fee'
 };
 
-var statsFr = {
+const statsFr = {
   'hp': 'PV',
   'attack': 'Attaque',
   'defense': 'Défense',
@@ -31,7 +31,7 @@ var statsFr = {
   'speed': 'Vitesse'
 };
 
-var typesColors = {
+const typesColors = {
   normal: 'rgba(159, 161, 159, 0.5)',
   fire: 'rgba(230, 40, 41, 0.5)',
   water: 'rgba(41, 128, 239, 0.5)',
@@ -52,12 +52,12 @@ var typesColors = {
   fairy: 'rgba(239, 112, 239, 0.5)'
 };
 
-var loader = document.getElementById('loader');
-var detailContent = document.getElementById('detail-content');
+const loader = document.getElementById('loader');
+const detailContent = document.getElementById('detail-content');
 
 async function chargerDetail() {
-  var params = new URLSearchParams(window.location.search);
-  var id = params.get('id');
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
 
   if (!id) {
     afficherErreur('Pokémon introuvable.');
@@ -65,22 +65,22 @@ async function chargerDetail() {
   }
 
   try {
-    var resPokemon = await fetch(API_URL + '/' + id);
-    var pokemon = await resPokemon.json();
+    const resPokemon = await fetch(API_URL + '/' + id);
+    const pokemon = await resPokemon.json();
 
-    var resSpecies = await fetch(SPECIES_URL + '/' + id);
-    var species = await resSpecies.json();
+    const resSpecies = await fetch(SPECIES_URL + '/' + id);
+    const species = await resSpecies.json();
 
-    var nomFr = pokemon.name;
-    for (var i = 0; i < species.names.length; i++) {
+    let nomFr = pokemon.name;
+    for (let i = 0; i < species.names.length; i++) {
       if (species.names[i].language.name === 'fr') {
         nomFr = species.names[i].name;
         break;
       }
     }
 
-    var description = '';
-    for (var i = 0; i < species.flavor_text_entries.length; i++) {
+    let description = '';
+    for (let i = 0; i < species.flavor_text_entries.length; i++) {
       if (species.flavor_text_entries[i].language.name === 'fr') {
         description = species.flavor_text_entries[i].flavor_text;
         break;
@@ -88,31 +88,31 @@ async function chargerDetail() {
     }
     description = description.replace(/\f/g, ' ').replace(/\n/g, ' ');
 
-    var categorie = '';
-    for (var i = 0; i < species.genera.length; i++) {
+    let categorie = '';
+    for (let i = 0; i < species.genera.length; i++) {
       if (species.genera[i].language.name === 'fr') {
         categorie = species.genera[i].genus;
         break;
       }
     }
 
-    var generation = species.generation.name.replace('generation-', 'Gen ');
-    var types = pokemon.types.map(function(t) { return t.type.name; });
-    var numero = String(pokemon.id).padStart(3, '0');
-    var sprite = pokemon.sprites.other['official-artwork'].front_default;
-    var couleur = typesColors[types[0]] || 'rgba(255,255,255,0.1)';
+    const generation = species.generation.name.replace('generation-', 'Gen ');
+    const types = pokemon.types.map(function(t) { return t.type.name; });
+    const numero = String(pokemon.id).padStart(3, '0');
+    const sprite = pokemon.sprites.other['official-artwork'].front_default;
+    const couleur = typesColors[types[0]] || 'rgba(255,255,255,0.1)';
 
-    var badgesTypes = '';
-    for (var i = 0; i < types.length; i++) {
+    let badgesTypes = '';
+    for (let i = 0; i < types.length; i++) {
       badgesTypes += '<span class="detail__type detail__type--' + types[i] + '">' + (typesFr[types[i]] || types[i]) + '</span>';
     }
 
-    var statsHtml = '';
-    for (var i = 0; i < pokemon.stats.length; i++) {
-      var stat = pokemon.stats[i];
-      var nom = statsFr[stat.stat.name] || stat.stat.name;
-      var valeur = stat.base_stat;
-      var pct = Math.round((valeur / 255) * 100);
+    let statsHtml = '';
+    for (let i = 0; i < pokemon.stats.length; i++) {
+      const stat = pokemon.stats[i];
+      const nom = statsFr[stat.stat.name] || stat.stat.name;
+      const valeur = stat.base_stat;
+      const pct = Math.round((valeur / 255) * 100);
       statsHtml += '<div class="detail__stat" role="listitem">'
         + '<span class="detail__stat-label">' + nom + '</span>'
         + '<span class="detail__stat-value">' + valeur + '</span>'
@@ -121,10 +121,10 @@ async function chargerDetail() {
         + '</div></div>';
     }
 
-    var talentsHtml = '';
-    for (var i = 0; i < pokemon.abilities.length; i++) {
-      var a = pokemon.abilities[i];
-      var cache = a.is_hidden ? ' <em style="font-size:0.7rem; opacity:0.6">(caché)</em>' : '';
+    let talentsHtml = '';
+    for (let i = 0; i < pokemon.abilities.length; i++) {
+      const a = pokemon.abilities[i];
+      const cache = a.is_hidden ? ' <em style="font-size:0.7rem; opacity:0.6">(caché)</em>' : '';
       talentsHtml += '<span class="detail__ability">' + a.ability.name.replace('-', ' ') + cache + '</span>';
     }
 
@@ -162,8 +162,8 @@ async function chargerDetail() {
     detailContent.hidden = false;
 
     setTimeout(function() {
-      var barres = document.querySelectorAll('.detail__stat-fill');
-      for (var i = 0; i < barres.length; i++) {
+      const barres = document.querySelectorAll('.detail__stat-fill');
+      for (let i = 0; i < barres.length; i++) {
         setTimeout(function(barre) {
           return function() {
             barre.style.width = barre.dataset.width;

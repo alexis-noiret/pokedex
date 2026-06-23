@@ -1,7 +1,7 @@
-var API_URL = 'https://pokeapi.co/api/v2/pokemon';
-var SPECIES_URL = 'https://pokeapi.co/api/v2/pokemon-species';
+const API_URL = 'https://pokeapi.co/api/v2/pokemon';
+const SPECIES_URL = 'https://pokeapi.co/api/v2/pokemon-species';
 
-var typesFr = {
+const typesFr = {
   normal: 'Normal',
   fire: 'Feu',
   water: 'Eau',
@@ -22,7 +22,7 @@ var typesFr = {
   fairy: 'Fee'
 };
 
-var typesColors = {
+const typesColors = {
   normal: 'rgba(159, 161, 159, 0.6)',
   fire: 'rgba(230, 40, 41, 0.6)',
   water: 'rgba(41, 128, 239, 0.6)',
@@ -43,38 +43,38 @@ var typesColors = {
   fairy: 'rgba(239, 112, 239, 0.6)'
 };
 
-var grid = document.getElementById('pokemon-grid');
-var loader = document.getElementById('loader');
-var compteur = document.getElementById('pokemon-count');
-var emptyState = document.getElementById('empty-state');
-var searchInput = document.getElementById('search-input');
-var resetBtn = document.getElementById('reset-btn');
-var filterBtns = document.querySelectorAll('.filter-btn');
-var navToggle = document.querySelector('.navbar__toggle');
-var navLinks = document.querySelector('.navbar__links');
+const grid = document.getElementById('pokemon-grid');
+const loader = document.getElementById('loader');
+const compteur = document.getElementById('pokemon-count');
+const emptyState = document.getElementById('empty-state');
+const searchInput = document.getElementById('search-input');
+const resetBtn = document.getElementById('reset-btn');
+const filterBtns = document.querySelectorAll('.filter-btn');
+const navToggle = document.querySelector('.navbar__toggle');
+const navLinks = document.querySelector('.navbar__links');
 
-var listePokemon = [];
-var filtre = 'all';
-var recherche = '';
+let listePokemon = [];
+let filtre = 'all';
+let recherche = '';
 
 async function chargerPokemon() {
   loader.hidden = false;
   grid.hidden = true;
 
   try {
-    var res = await fetch(API_URL + '?limit=151');
-    var data = await res.json();
-    var liste = data.results;
+    const res = await fetch(API_URL + '?limit=151');
+    const data = await res.json();
+    const liste = data.results;
 
-    for (var i = 0; i < liste.length; i++) {
-      var resPokemon = await fetch(liste[i].url);
-      var pokemon = await resPokemon.json();
+    for (let i = 0; i < liste.length; i++) {
+      const resPokemon = await fetch(liste[i].url);
+      const pokemon = await resPokemon.json();
 
-      var resSpecies = await fetch(SPECIES_URL + '/' + pokemon.id);
-      var species = await resSpecies.json();
+      const resSpecies = await fetch(SPECIES_URL + '/' + pokemon.id);
+      const species = await resSpecies.json();
 
-      var nomFr = pokemon.name;
-      for (var j = 0; j < species.names.length; j++) {
+      let nomFr = pokemon.name;
+      for (let j = 0; j < species.names.length; j++) {
         if (species.names[j].language.name === 'fr') {
           nomFr = species.names[j].name;
           break;
@@ -106,7 +106,7 @@ function afficherGrille(liste, anime) {
   }
 
   if (anime) {
-    for (var i = 0; i < liste.length; i++) {
+    for (let i = 0; i < liste.length; i++) {
       setTimeout(function(p) {
         return function() {
           grid.appendChild(creerCarte(p));
@@ -114,30 +114,30 @@ function afficherGrille(liste, anime) {
       }(liste[i]), i * 30);
     }
   } else {
-    for (var i = 0; i < liste.length; i++) {
+    for (let i = 0; i < liste.length; i++) {
       grid.appendChild(creerCarte(liste[i]));
     }
   }
 
-  var nb = liste.length;
+  const nb = liste.length;
   compteur.textContent = nb + ' Pokémon affiché' + (nb > 1 ? 's' : '');
 }
 
 function creerCarte(pokemon) {
-  var card = document.createElement('article');
+  const card = document.createElement('article');
   card.classList.add('card');
   card.setAttribute('tabindex', '0');
   card.setAttribute('role', 'button');
   card.setAttribute('aria-label', 'Voir les détails de ' + pokemon.nomFr);
 
-  var types = pokemon.types.map(function(t) { return t.type.name; });
-  var numero = String(pokemon.id).padStart(3, '0');
-  var image = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
-  var couleur = typesColors[types[0]] || 'rgba(255,255,255,0.1)';
+  const types = pokemon.types.map(function(t) { return t.type.name; });
+  const numero = String(pokemon.id).padStart(3, '0');
+  const image = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
+  const couleur = typesColors[types[0]] || 'rgba(255,255,255,0.1)';
 
-  var badgesTypes = '';
-  for (var i = 0; i < types.length; i++) {
-    var t = types[i];
+  let badgesTypes = '';
+  for (let i = 0; i < types.length; i++) {
+    const t = types[i];
     badgesTypes += '<span class="type-badge type-badge--' + t + '">' + (typesFr[t] || t) + '</span>';
   }
 
@@ -161,14 +161,14 @@ function creerCarte(pokemon) {
 }
 
 function filtrer() {
-  var resultat = [];
+  const resultat = [];
 
-  for (var i = 0; i < listePokemon.length; i++) {
-    var pokemon = listePokemon[i];
-    var types = pokemon.types.map(function(t) { return t.type.name; });
+  for (let i = 0; i < listePokemon.length; i++) {
+    const pokemon = listePokemon[i];
+    const types = pokemon.types.map(function(t) { return t.type.name; });
 
-    var okType = filtre === 'all' || types.indexOf(filtre) !== -1;
-    var okRecherche = pokemon.name.indexOf(recherche) !== -1
+    const okType = filtre === 'all' || types.indexOf(filtre) !== -1;
+    const okRecherche = pokemon.name.indexOf(recherche) !== -1
       || pokemon.nomFr.toLowerCase().indexOf(recherche) !== -1
       || String(pokemon.id).indexOf(recherche) !== -1;
 
@@ -180,9 +180,9 @@ function filtrer() {
   afficherGrille(resultat, false);
 }
 
-for (var i = 0; i < filterBtns.length; i++) {
+for (let i = 0; i < filterBtns.length; i++) {
   filterBtns[i].addEventListener('click', function() {
-    for (var j = 0; j < filterBtns.length; j++) {
+    for (let j = 0; j < filterBtns.length; j++) {
       filterBtns[j].classList.remove('filter-btn--active');
     }
     this.classList.add('filter-btn--active');
@@ -200,7 +200,7 @@ resetBtn.addEventListener('click', function() {
   searchInput.value = '';
   recherche = '';
   filtre = 'all';
-  for (var i = 0; i < filterBtns.length; i++) {
+  for (let i = 0; i < filterBtns.length; i++) {
     filterBtns[i].classList.remove('filter-btn--active');
   }
   filterBtns[0].classList.add('filter-btn--active');
@@ -209,7 +209,7 @@ resetBtn.addEventListener('click', function() {
 
 if (navToggle) {
   navToggle.addEventListener('click', function() {
-    var ouvert = navLinks.classList.toggle('navbar__links--open');
+    const ouvert = navLinks.classList.toggle('navbar__links--open');
     navToggle.setAttribute('aria-expanded', ouvert);
   });
 }

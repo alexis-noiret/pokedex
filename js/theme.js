@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  var bouton = document.getElementById('theme-toggle');
-  var themeSauvegarde = localStorage.getItem('pokedex-theme');
+  const bouton = document.getElementById('theme-toggle');
+  let themeSauvegarde = localStorage.getItem('pokedex-theme');
 
   if (themeSauvegarde === null) {
     themeSauvegarde = 'dark';
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (bouton) {
     bouton.addEventListener('click', function() {
-      var themeActuel = localStorage.getItem('pokedex-theme');
+      const themeActuel = localStorage.getItem('pokedex-theme');
 
       if (themeActuel === 'light') {
         appliquerTheme('dark');
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function appliquerTheme(theme) {
-  var bouton = document.getElementById('theme-toggle');
+  const bouton = document.getElementById('theme-toggle');
 
   if (theme === 'light') {
     document.documentElement.classList.add('light');
