@@ -11,12 +11,7 @@
 
   <link rel="stylesheet" href="../style.css">
 
-  <script>
-    var saved = localStorage.getItem('pokedex-theme');
-    if (saved === 'light') {
-      document.documentElement.classList.add('light');
-    }
-  </script>
+  <script src="../js/theme-init.js"></script>
 </head>
 <body>
   <header class="header">
@@ -63,7 +58,7 @@
               <li class="about__tech-item"><span class="about__tech-icon">📱</span> Mobile-first + Flexbox / Grid</li>
               <li class="about__tech-item"><span class="about__tech-icon">⚡</span> JavaScript ES6+ (fetch, async/await)</li>
               <li class="about__tech-item"><span class="about__tech-icon">🌐</span> PokéAPI (API REST publique)</li>
-              <li class="about__tech-item"><span class="about__tech-icon">✍️</span> Google Fonts — Silkscreen + DM Sans</li>
+              <li class="about__tech-icon">✍️</span> Google Fonts — Silkscreen + DM Sans</li>
             </ul>
           </div>
 
@@ -109,6 +104,7 @@
     </div>
   </footer>
 
+  <script src="../js/theme-init.js"></script>
   <script src="../js/theme.js"></script>
 </body>
 </html>
