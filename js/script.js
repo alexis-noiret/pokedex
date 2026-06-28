@@ -50,12 +50,10 @@ const emptyState = document.getElementById('empty-state');
 const searchInput = document.getElementById('search-input');
 const resetBtn = document.getElementById('reset-btn');
 const filterBtns = document.querySelectorAll('.filter-btn');
-const navToggle = document.querySelector('.navbar__toggle');
-const navLinks = document.querySelector('.navbar__links');
-
 let listePokemon = [];
 let filtre = 'all';
 let recherche = '';
+var timers = [];
 
 async function chargerPokemon() {
   loader.hidden = false;
@@ -107,11 +105,12 @@ function afficherGrille(liste, anime) {
 
   if (anime) {
     for (let i = 0; i < liste.length; i++) {
-      setTimeout(function(p) {
+      var t = setTimeout(function(p) {
         return function() {
           grid.appendChild(creerCarte(p));
         };
       }(liste[i]), i * 30);
+      timers.push(t);
     }
   } else {
     for (let i = 0; i < liste.length; i++) {
@@ -161,6 +160,10 @@ function creerCarte(pokemon) {
 }
 
 function filtrer() {
+  for (var k = 0; k < timers.length; k++) {
+    clearTimeout(timers[k]);
+  }
+  timers = [];
   const resultat = [];
 
   for (let i = 0; i < listePokemon.length; i++) {
@@ -206,12 +209,5 @@ resetBtn.addEventListener('click', function() {
   filterBtns[0].classList.add('filter-btn--active');
   filtrer();
 });
-
-if (navToggle) {
-  navToggle.addEventListener('click', function() {
-    const ouvert = navLinks.classList.toggle('navbar__links--open');
-    navToggle.setAttribute('aria-expanded', ouvert);
-  });
-}
 
 chargerPokemon();
