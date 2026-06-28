@@ -56,6 +56,19 @@ html.light .navbar__logo {
 html.light .navbar__toggle span {
   background: #1a1d2e;
 }
+html.light .navbar__links--open {
+  background: #f4f6fb;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+html.light .navbar__links--open .navbar__link {
+  color: #1a1d2e;
+}
+html.light .navbar__links--open .navbar__link:hover {
+  color: #FF4655;
+}
+html.light .navbar__links--open .navbar__link--active {
+  color: #FF4655;
+}
 html.light .hero__eyebrow {
   color: #cc1f20;
 }
@@ -349,6 +362,11 @@ html.light .footer__link {
   letter-spacing: 0.05em;
   color: #FFD700;
 }
+.navbar__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 .navbar__links {
   display: none;
   list-style: none;
@@ -358,6 +376,20 @@ html.light .footer__link {
   .navbar__links {
     display: flex;
   }
+}
+.navbar__links--open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #0d0f1a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.25rem 1.5rem;
+  gap: 1.25rem;
+  z-index: 99;
+  backdrop-filter: blur(12px);
 }
 .navbar__link {
   font-size: 0.9rem;
@@ -1451,4 +1483,3 @@ html.light .footer__link {
 [hidden] {
   display: none !important;
 }
-

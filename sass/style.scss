@@ -101,6 +101,15 @@ html.light {
   .navbar__link--active { color: #FF4655; }
   .navbar__logo { color: #FF4655; }
   .navbar__toggle span { background: #1a1d2e; }
+  .navbar__links--open {
+    background: #f4f6fb;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    .navbar__link {
+      color: #1a1d2e;
+      &:hover { color: #FF4655; }
+      &--active { color: #FF4655; }
+    }
+  }
   .hero__eyebrow { color: #cc1f20; }
   .hero__title   { color: #1a1d2e; }
   .hero__desc    { color: #4a5168; }
@@ -221,12 +230,31 @@ html.light {
     letter-spacing: 0.05em;
     color: $color-accent;
   }
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
   &__links {
     display: none;
     list-style: none;
     gap: 2rem;
     @media (min-width: 768px) {
       display: flex;
+    }
+    &--open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: $color-bg;
+      border-bottom: 1px solid $color-border;
+      padding: 1.25rem 1.5rem;
+      gap: 1.25rem;
+      z-index: 99;
+      backdrop-filter: blur(12px);
     }
   }
   &__link {
