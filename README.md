@@ -9,7 +9,7 @@
 
 ## 📌 Présentation
 
-Ce Pokédex est un projet pédagogique réalisé dans le cadre du titre RNCP **Développeur Web Front-End — Bloc 2** : *Développer des interfaces Frontend pour un site ou une application Web/Web Mobile*, à **La Plateforme**.
+Ce Pokédex est un projet personnel, réalisé en dehors des cours. Je l'ai ensuite présenté à l'examen du titre RNCP **Développeur Web Full Stack — Bloc 2 « Front End »** (*Développer des interfaces Frontend pour un site ou une application Web/Web Mobile*), bloc validé.
 
 Il affiche les **151 Pokémon de la première génération** en consommant l'API publique **PokéAPI**, sans clé d'authentification. L'application est entièrement dynamique, responsive et accessible.
 
