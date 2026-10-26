@@ -7,7 +7,9 @@
 ![WCAG](https://img.shields.io/badge/Accessibilité-WCAG%20AA-4caf50)
 ![Status](https://img.shields.io/badge/Project-Examen%20Bloc%202-blue)
 
-## 📌 Présentation
+---
+
+## 📋 Présentation
 
 Ce Pokédex est un projet personnel, réalisé en dehors des cours. Je l'ai ensuite présenté à l'examen du titre RNCP **Développeur Web Full Stack — Bloc 2 « Front End »** (*Développer des interfaces Frontend pour un site ou une application Web/Web Mobile*), bloc validé.
 
@@ -75,7 +77,7 @@ Les maquettes couvrent :
 
 ---
 
-## 📂 Structure du projet
+## 📁 Structure du dépôt
 
 ```
 pokedex/
@@ -154,7 +156,7 @@ Ouvrir `index.html` dans un navigateur (Live Server recommandé).
 
 ---
 
-## ✅ Compétences Bloc 2 démontrées
+## 🧠 Compétences démontrées — Bloc 2 RNCP
 
 ### Découpage maquette → HTML sémantique
 
@@ -236,7 +238,7 @@ Media queries ordonnées du mobile vers le desktop :
 
 ---
 
-## 👨‍💻 Auteur
+## 👤 Auteur
 
 **Alexis Noiret**
 🎓 Étudiant en Bachelor IT Cybersécurité — La Plateforme, Cannes
@@ -253,6 +255,6 @@ Projet réalisé dans le cadre du **Titre RNCP N°37273 — Développeur Web Fro
 
 ---
 
-## ⚠️ Disclaimer
+## ⚠️ Avertissement
 
 Projet réalisé à des fins pédagogiques. Pokémon © Nintendo / Game Freak. Données fournies par PokéAPI.
